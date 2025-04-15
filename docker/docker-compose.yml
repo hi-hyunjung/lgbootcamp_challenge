@@ -1,5 +1,5 @@
 services:
-  web:
+  lgweb:
     build:
       context: ../
       dockerfile: docker/web.dockerfile
@@ -22,7 +22,7 @@ services:
       - "traefik.http.services.web.loadbalancer.server.port=5000"
 
 
-  api:
+  lgapi:
     build:
       context: ../
       dockerfile: docker/api.dockerfile
