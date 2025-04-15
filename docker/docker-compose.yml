@@ -1,36 +1,53 @@
 services:
   web:
-    hostname: web
-    image: line/abc-user-feedback-web:latest
+    build:
+      context: ../
+      dockerfile: docker/web.dockerfile
     restart: always
     ports:
-      - 3000:3000
+      - "${WEB_PORT:-5000}:5000"
+    container_name: lgweb
     environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-      - NEXT_PUBLIC_MAX_DAYS=90
+      - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+      - NEXT_PUBLIC_MAX_DAYS=${NEXT_PUBLIC_MAX_DAYS}
+      - SESSION_PASSWORD=${SESSION_PASSWORD}
     depends_on:
-      - api
+      - lgapi
     networks:
-      - app_network
+      - app_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=PathPrefix(`/lgweb`)"
+      - "traefik.http.routers.web.entrypoints=web"
+      - "traefik.http.services.web.loadbalancer.server.port=5000"
+
 
   api:
-    hostname: api
-    image: line/abc-user-feedback-api:latest
+    build:
+      context: ../
+      dockerfile: docker/api.dockerfile
     restart: always
     ports:
-      - 4000:4000
+      - "${API_PORT:-5005}:5005"
     environment:
-      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
-      - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
-      - BASE_URL=http://api:3000
+      - JWT_SECRET=${JWT_SECRET}
+      - MYSQL_PRIMARY_URL=${MYSQL_PRIMARY_URL}
+      - BASE_URL=${BASE_URL}
       - ACCESS_TOKEN_EXPIRED_TIME=10m
       - REFESH_TOKEN_EXPIRED_TIME=1h
-      - APP_PORT=4000
-      - APP_ADDRESS=api
+      - APP_PORT=5000
+      - APP_ADDRESS=lgapi
       - AUTO_MIGRATION=true
       - NODE_OPTIONS="--max_old_space_size=3072"
+    container_name: lgapi
     networks:
-      - app_network
+      - app_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=PathPrefix(`/lgapi`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.services.api.loadbalancer.server.port=5005"
 
 networks:
-  app_network:
+  app_net:
+    external: true

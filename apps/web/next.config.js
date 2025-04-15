@@ -14,6 +14,8 @@ const nextConfig = {
   transpilePackages: ['@ufb/react'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
+  basePath: '/lgweb',
+  assetPrefix: '/lgweb',
 };
 
 export default nextConfig;

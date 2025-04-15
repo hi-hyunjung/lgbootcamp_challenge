@@ -30,7 +30,7 @@ import { HealthModule } from './domains/operation/health/health.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
 import type { ConfigServiceType } from './types/config-service.type';
 
-const globalPrefix = 'api';
+const globalPrefix = 'lgapi';
 
 async function bootstrap() {
   initializeTransactionalContext();

@@ -35,13 +35,13 @@ COPY turbo.json ./
 COPY .turbo/ ./.turbo/
 COPY .git/ ./.git/
 
-ARG TURBO_TOKEN
-ENV TURBO_TOKEN=${TURBO_TOKEN}
+#ARG TURBO_TOKEN
+#ENV TURBO_TOKEN=${TURBO_TOKEN}
 
-ARG TURBO_TEAM
-ENV TURBO_TEAM=${TURBO_TEAM}
+#ARG TURBO_TEAM
+#ENV TURBO_TEAM=${TURBO_TEAM}
 
-COPY --from=builder /app/apps/web/.env.build /app/apps/web/.env.production
+#COPY --from=builder /app/apps/web/.env.build /app/apps/web/.env.production
 RUN SKIP_ENV_VALIDATION=true pnpm dlx turbo run build --filter=web...
 
 FROM base AS runner
@@ -61,7 +61,7 @@ USER nextjs
 COPY --from=installer /app/apps/web/next-i18next.config.js .
 COPY --from=installer /app/apps/web/next.config.js .
 COPY --from=installer /app/apps/web/package.json .
-COPY --from=installer /app/apps/web/.env.production ./apps/web/.env.production
+#COPY --from=installer /app/apps/web/.env.production ./apps/web/.env.production
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
@@ -69,6 +69,8 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/entrypoint.sh ./apps/web/entrypoint.sh
+
+RUN chmod +x ./projects/web/entrypoint.sh
 
 ENTRYPOINT ["apps/web/entrypoint.sh"]
 
