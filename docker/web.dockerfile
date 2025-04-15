@@ -70,7 +70,7 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/we
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/entrypoint.sh ./apps/web/entrypoint.sh
 
-RUN chmod +x ./projects/web/entrypoint.sh
+RUN chmod +x ./apps/web/entrypoint.sh
 
 ENTRYPOINT ["apps/web/entrypoint.sh"]
 
