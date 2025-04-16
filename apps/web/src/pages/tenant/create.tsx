@@ -88,8 +88,8 @@ const CreateTenantPage: NextPageWithLayout = () => {
       description={t(`v2.create-tenant.${step}.description`)}
       image={
         step === 'final' ?
-          '/assets/images/complete-tenant-setting.svg'
-        : '/assets/images/tenant-setting.svg'
+          '/lgweb/assets/images/complete-tenant-setting.svg'
+        : '/lgweb/assets/images/tenant-setting.svg'
       }
     >
       <div className="flex min-h-[300px] flex-col">
