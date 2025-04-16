@@ -27,7 +27,7 @@ const NotFoundPage = () => {
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-6">
         <Image
-          src="/assets/images/404.svg"
+          src="lgweb/assets/images/404.svg"
           alt="404"
           width={320}
           height={320}

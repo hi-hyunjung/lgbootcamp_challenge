@@ -17,9 +17,9 @@ services:
       - app_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=PathPrefix(`/lgweb`)"
-      - "traefik.http.routers.web.entrypoints=web"
-      - "traefik.http.services.web.loadbalancer.server.port=5000"
+      - "traefik.http.routers.lgweb.rule=PathPrefix(`/lgweb`)"
+      - "traefik.http.routers.lgweb.entrypoints=web"
+      - "traefik.http.services.lgweb.loadbalancer.server.port=5000"
 
 
   lgapi:
@@ -44,9 +44,9 @@ services:
       - app_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=PathPrefix(`/lgapi`)"
-      - "traefik.http.routers.api.entrypoints=web"
-      - "traefik.http.services.api.loadbalancer.server.port=5005"
+      - "traefik.http.routers.lgapi.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.lgapi.entrypoints=web"
+      - "traefik.http.services.lgapi.loadbalancer.server.port=5005"
 
 networks:
   app_net:
