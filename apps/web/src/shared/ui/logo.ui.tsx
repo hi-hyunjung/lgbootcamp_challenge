@@ -28,7 +28,7 @@ const Logo: React.FC<IProps> = () => {
       className="flex cursor-pointer items-center gap-1"
       href={Path.isProtectPage(router.pathname) ? Path.MAIN : Path.SIGN_IN}
     >
-      <Image src="lgweb/assets/images/logo.svg" alt="logo" width={24} height={24} />
+      <Image src="/lgweb/assets/images/logo.svg" alt="logo" width={24} height={24} />
       <h1 className="text-title-h5">ABC User Feedback</h1>
     </Link>
   );
