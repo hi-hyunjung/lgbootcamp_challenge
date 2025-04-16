@@ -83,7 +83,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     <>
       <Head>
         <title>ABC User Feedback</title>
-        <link rel="shortcut icon" href="/lgweb/assets/images/logo.svg" />
+        <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
       <style jsx global>{`
         html {
