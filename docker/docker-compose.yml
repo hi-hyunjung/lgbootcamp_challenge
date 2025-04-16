@@ -11,6 +11,7 @@ services:
       - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
       - NEXT_PUBLIC_MAX_DAYS=${NEXT_PUBLIC_MAX_DAYS}
       - SESSION_PASSWORD=${SESSION_PASSWORD}
+      - PORT=${NEXT_PORT}
     depends_on:
       - lgapi
     networks:
