@@ -16,6 +16,7 @@ const nextConfig = {
   images: { remotePatterns: [{ hostname: '*' }] },
   basePath: '/lgweb',
   assetPrefix: '/lgweb',
+  trailingSlash: true,
 };
 
 export default nextConfig;
