@@ -22,7 +22,6 @@ services:
       - "traefik.http.routers.lgweb.entrypoints=web"
       - "traefik.http.services.lgweb.loadbalancer.server.port=5000"
 
-
   lgapi:
     build:
       context: ../
@@ -36,10 +35,14 @@ services:
       - BASE_URL=${BASE_URL}
       - ACCESS_TOKEN_EXPIRED_TIME=10m
       - REFESH_TOKEN_EXPIRED_TIME=1h
-      - APP_PORT=5000
-      - APP_ADDRESS=lgapi
+      - APP_PORT={$APP_PORT}
+#      - APP_ADDRESS=api
       - AUTO_MIGRATION=true
       - NODE_OPTIONS="--max_old_space_size=3072"
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_SENDER=${SMTP_SENDER}
+      - SMTP_BASE_URL=${SMTP_BASE_URL}
     container_name: lgapi
     networks:
       - app_net
