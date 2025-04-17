@@ -4,6 +4,7 @@ import createJiti from 'jiti';
 import * as i18nConfig from './next-i18next.config.js';
 
 createJiti(fileURLToPath(import.meta.url))('./src/env');
+const isProd = process.env.NODE_ENV === 'production';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -14,9 +15,12 @@ const nextConfig = {
   transpilePackages: ['@ufb/react'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
-  basePath: '/lgweb',
-  assetPrefix: '/lgweb',
-  trailingSlash: true,
+
+  ...(isProd && {
+    basePath: '/lgweb',
+    assetPrefix: '/lgweb',
+    trailingSlash: true,
+  })
 };
 
 export default nextConfig;

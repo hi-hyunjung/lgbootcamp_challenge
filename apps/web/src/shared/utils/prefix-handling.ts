@@ -13,11 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './cn';
-export * from './parse-as-date-range';
-export * from './get-day-count';
-export * from './display-string';
-export * from './path-parsing';
-export * from './is-object-equal';
-export * from './first-letter-pascal';
-export * from './prefix-handling';
+export const getPrefixPath = (path: string) => {
+  const prefix = process.env.NODE_ENV === 'production' ? '/lgweb' : '';
+  return `${prefix}${path}`;
+};
