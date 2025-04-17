@@ -18,7 +18,7 @@ services:
       - app_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lgweb.rule=PathPrefix(`/lgweb`)"
+      - "traefik.http.routers.lgweb.rule=PathPrefix(`/`)"
       - "traefik.http.routers.lgweb.entrypoints=web"
       - "traefik.http.services.lgweb.loadbalancer.server.port=5000"
 

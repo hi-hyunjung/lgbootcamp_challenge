@@ -68,7 +68,7 @@ const SignInPage: NextPageWithLayout = () => {
   return (
     <AnonymousTemplate
       title={t('button.sign-in')}
-      image="/lgweb/assets/images/sign-in.svg"
+      image="/assets/images/sign-in.svg"
       imageSub={
         <p className="text-title-h3 text-center">
           Listen to <br />
