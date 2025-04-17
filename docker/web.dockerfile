@@ -41,6 +41,12 @@ COPY .git/ ./.git/
 #ARG TURBO_TEAM
 #ENV TURBO_TEAM=${TURBO_TEAM}
 
+ARG NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+
+ARG NEXT_PUBLIC_MAX_DAYS
+ENV NEXT_PUBLIC_MAX_DAYS=${NEXT_PUBLIC_MAX_DAYS}
+
 #COPY --from=builder /app/apps/web/.env.build /app/apps/web/.env.production
 RUN SKIP_ENV_VALIDATION=true pnpm dlx turbo run build --filter=web...
 
