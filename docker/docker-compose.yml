@@ -35,7 +35,7 @@ services:
       - BASE_URL=${BASE_URL}
       - ACCESS_TOKEN_EXPIRED_TIME=10m
       - REFESH_TOKEN_EXPIRED_TIME=1h
-      - APP_PORT={$APP_PORT}
+      - APP_PORT=5005
 #      - APP_ADDRESS=api
       - AUTO_MIGRATION=true
       - NODE_OPTIONS="--max_old_space_size=3072"
