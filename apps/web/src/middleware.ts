@@ -26,7 +26,7 @@ export function middleware(req: NextRequest) {
   const isProtected = Path.isProtectPage(req.nextUrl.pathname);
 
   if (jwt && !isProtected) {
-    return NextResponse.redirect(new URL(Path.MAIN, req.url));
+    return NextResponse.redirect(new URL(`/lgweb${Path.MAIN}`, req.url));
   }
 
   if (!jwt && isProtected) {
@@ -34,7 +34,7 @@ export function middleware(req: NextRequest) {
     if (parmas.get('callback_url')) {
       return NextResponse.redirect(
         new URL(
-          Path.SIGN_IN + '?callback_url=' + parmas.get('callback_url'),
+          '/lgweb'+Path.SIGN_IN + '?callback_url=' + parmas.get('callback_url'),
           req.url,
         ),
       );
@@ -43,7 +43,7 @@ export function middleware(req: NextRequest) {
         req.nextUrl.search,
       )}`;
       return NextResponse.redirect(
-        new URL(Path.SIGN_IN + '?callback_url=' + requestPath, req.url),
+        new URL('/lgweb'+Path.SIGN_IN + '?callback_url=' + requestPath, req.url),
       );
     }
   }
@@ -52,7 +52,7 @@ export function middleware(req: NextRequest) {
     const requestPath = `${req.nextUrl.pathname}${req.nextUrl.search}`;
     const locale =
       req.cookies.get('NEXT_LOCALE')?.value ?? i18nConfig.i18n.defaultLocale;
-    return NextResponse.redirect(new URL(`/${locale}${requestPath}`, req.url));
+    return NextResponse.redirect(new URL(`/lgweb/${locale}${requestPath}`, req.url));
   }
 
   return NextResponse.next();
