@@ -38,7 +38,7 @@ const NotFoundPage = () => {
             The page you are looking for isn’t here.
           </p>
         </div>
-        <Button onClick={() => router.push(Path.MAIN)}>Home</Button>
+        <Button onClick={() => router.push('/lgweb'+Path.MAIN)}>Home</Button>
       </div>
     </div>
   );
