@@ -29,7 +29,7 @@ const i18nConfig = {
   serializeConfig: false,
 
   localePath: isProd
-      ? path.resolve('./apps/web/public/locales') // 또는 monorepo 경로에 맞게
+      ? 'lgweb/public/locales' // 또는 monorepo 경로에 맞게
       : './public/locales',
 };
 
