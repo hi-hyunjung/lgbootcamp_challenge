@@ -81,7 +81,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, documentConfig, {
     include: [APIModule],
   });
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('api/docs', app, document);
 
   const configService = app.get(ConfigService<ConfigServiceType>);
   const { port, address }: { port: number; address: string } =
