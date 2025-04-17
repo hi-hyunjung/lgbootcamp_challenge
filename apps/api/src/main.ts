@@ -86,7 +86,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService<ConfigServiceType>);
   const { port, address }: { port: number; address: string } =
     configService.get('app', { infer: true }) ?? {
-      port: 4000,
+      port: 4004,
       address: 'localhost',
     };
 

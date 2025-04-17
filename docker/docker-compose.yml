@@ -21,6 +21,8 @@ services:
       - "traefik.http.routers.lgweb.rule=PathPrefix(`/lgweb`)"
       - "traefik.http.routers.lgweb.entrypoints=web"
       - "traefik.http.services.lgweb.loadbalancer.server.port=5000"
+      - "traefik.http.routers.lgweb.middlewares=strip-lgweb"
+      - "traefik.http.middlewares.strip-lgweb.stripprefix.prefixes=/lgweb"
 
 
   lgapi:
