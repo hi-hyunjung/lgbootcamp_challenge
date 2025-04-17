@@ -13,7 +13,7 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   transpilePackages: ['@ufb/react'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
-  images: { remotePatterns: [{ hostname: '*' }] },
+  images: { remotePatterns: [{ hostname: '*' }], path: '/lgweb/_next/image' },
   basePath: '/lgweb',
   assetPrefix: '/lgweb',
   trailingSlash: true,
