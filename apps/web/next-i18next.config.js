@@ -14,6 +14,8 @@
  * under the License.
  */
 
+const isProd = process.env.NODE_ENV === 'production';
+
 /** @type {import('next-i18next').UserConfig} */
 const i18nConfig = {
   i18n: {
@@ -25,6 +27,10 @@ const i18nConfig = {
   },
   nonExplicitSupportedLngs: true,
   serializeConfig: false,
+
+  localePath: isProd
+      ? path.resolve('./apps/web/public/locales') // 또는 monorepo 경로에 맞게
+      : './public/locales',
 };
 
 export default i18nConfig;
