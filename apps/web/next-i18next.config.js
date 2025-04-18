@@ -15,6 +15,8 @@
  */
 
 const isProd = process.env.NODE_ENV === 'production';
+const isServer = typeof window === 'undefined';
+const basePath = isProd ? '/lgweb' : '';
 
 /** @type {import('next-i18next').UserConfig} */
 const i18nConfig = {
@@ -28,9 +30,19 @@ const i18nConfig = {
   nonExplicitSupportedLngs: true,
   serializeConfig: false,
 
-  localePath: isProd
-      ? 'lgweb/public/locales' // 또는 monorepo 경로에 맞게
-      : './public/locales',
+    localePath: path.resolve('./public/locales'), // 서버에서는 파일 시스템 사용
+
+    ...(isServer
+        ? {
+            backend: {
+                loadPath: path.resolve('./public/locales/{{lng}}/{{ns}}.json'),
+            },
+        }
+        : {
+            backend: {
+                loadPath: `${basePath}/locales/{{lng}}/{{ns}}.json`,
+            },
+        }),
 };
 
 export default i18nConfig;
