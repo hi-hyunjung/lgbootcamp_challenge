@@ -28,7 +28,7 @@ const UnauthorizedPage: NextPage = () => {
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-6">
         <Image
-          src="/lgweb/assets/images/403.svg"
+          src="/assets/images/403.svg"
           alt="403"
           width={320}
           height={320}
