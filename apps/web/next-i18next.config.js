@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import path from 'path';
 const isProd = process.env.NODE_ENV === 'production';
 const isServer = typeof window === 'undefined';
 const basePath = isProd ? '/lgweb' : '';
