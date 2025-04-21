@@ -56,6 +56,7 @@ import { TenantModule } from './domains/admin/tenant/tenant.module';
 import { UserModule } from './domains/admin/user/user.module';
 import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
+import { MetricsModule } from './domains/operation/metrics/metrics.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
 import { SchedulerLockModule } from './domains/operation/scheduler-lock/scheduler-lock.module';
 
@@ -68,6 +69,7 @@ export const domainModules = [
   CategoryModule,
   HealthModule,
   MigrationModule,
+  // MetricsModule,
   ApiKeyModule,
   IssueTrackerModule,
   IssueModule,
@@ -90,7 +92,8 @@ export const domainModules = [
     TypeOrmConfigModule,
     OpensearchConfigModule,
     MailerConfigModule,
-    PrometheusModule.register(),
+    // PrometheusModule.register(),
+    MetricsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, opensearchConfig, smtpConfig, jwtConfig, mysqlConfig],

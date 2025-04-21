@@ -27,6 +27,7 @@ import { AppModule, domainModules } from './app.module';
 import { HttpExceptionFilter } from './common/filters';
 import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
+import { MetricsModule } from './domains/operation/metrics/metrics.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
 import type { ConfigServiceType } from './types/config-service.type';
 
@@ -63,7 +64,12 @@ async function bootstrap() {
     .addBearerAuth()
     .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey')
     .build();
-  const excludeModules = [APIModule, HealthModule, MigrationModule];
+  const excludeModules = [
+    APIModule,
+    HealthModule,
+    MigrationModule,
+    MetricsModule,
+  ];
   const adminDocument = SwaggerModule.createDocument(app, adminDocumentConfig, {
     include: domainModules.filter((module) => !excludeModules.includes(module)),
   });
