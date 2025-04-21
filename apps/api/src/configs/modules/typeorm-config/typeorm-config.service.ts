@@ -55,7 +55,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrationsTableName: 'migrations',
       // logging: ['warn', 'error'], //
       logging: true,
-      logger: new FileLogger(true, { logPath: `/app/logs/typeorm.log` }),
+      logger: new FileLogger(true, { logPath: `logs/typeorm.log` }),
       migrationsRun: auto_migration,
       namingStrategy: new SnakeNamingStrategy(),
       timezone: '+00:00',
