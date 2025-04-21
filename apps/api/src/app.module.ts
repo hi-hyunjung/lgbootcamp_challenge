@@ -107,7 +107,7 @@ export const domainModules = [
     }),
     LoggerModule.forRoot({
       pinoHttp: {
-        transport: { target: 'pino-pretty', options: { singleLine: true } },
+        // transport: { target: 'pino-pretty', options: { singleLine: true } },
         autoLogging: {
           ignore: (req: Request) => req.originalUrl === '/api/health',
         },
