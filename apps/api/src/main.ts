@@ -73,7 +73,7 @@ async function bootstrap() {
   const adminDocument = SwaggerModule.createDocument(app, adminDocumentConfig, {
     include: domainModules.filter((module) => !excludeModules.includes(module)),
   });
-  SwaggerModule.setup('admin-docs', app, adminDocument);
+  SwaggerModule.setup('api/admin-docs', app, adminDocument);
 
   const documentConfig = new DocumentBuilder()
     .setTitle('User Feedback API Document')
