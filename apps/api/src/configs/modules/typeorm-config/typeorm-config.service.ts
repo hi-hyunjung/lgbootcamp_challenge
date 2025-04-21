@@ -51,7 +51,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       entities: [join(__dirname, '../../../**/*.entity.{ts,js}')],
       migrations: [join(__dirname, 'migrations/*.{ts,js}')],
       migrationsTableName: 'migrations',
-      logging: ['warn', 'error'],
+      // logging: ['warn', 'error'], //
+      logging: ['query'], // logs all queries
       migrationsRun: auto_migration,
       namingStrategy: new SnakeNamingStrategy(),
       timezone: '+00:00',
