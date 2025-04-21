@@ -52,7 +52,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrations: [join(__dirname, 'migrations/*.{ts,js}')],
       migrationsTableName: 'migrations',
       // logging: ['warn', 'error'], //
-      logging: ['query'], // logs all queries
+      logging: true,
       migrationsRun: auto_migration,
       namingStrategy: new SnakeNamingStrategy(),
       timezone: '+00:00',
