@@ -51,7 +51,7 @@ services:
     networks:
       - app_net
     volumes:
-      - ~/logs/lgbootcamp:/app/logs
+      - /Users/hjbj/logs/lgbootcamp:/app/logs
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lgapi.rule=PathPrefix(`/api`)"
