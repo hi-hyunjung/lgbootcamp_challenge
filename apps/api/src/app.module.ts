@@ -17,10 +17,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+// import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { Request } from 'express';
 import { ClsModule } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
+import pino from 'pino';
 
 import { appConfig, appConfigSchema } from './configs/app.config';
 import { jwtConfig, jwtConfigSchema } from './configs/jwt.config';
@@ -110,6 +111,13 @@ export const domainModules = [
         autoLogging: {
           ignore: (req: Request) => req.originalUrl === '/api/health',
         },
+        stream: pino.destination({
+          dest: '/app/logs/lgbootcamp-api.log',
+          // minLength: 4096,
+          // sync: false,
+          sync: true,
+
+        }),
         customLogLevel: (req, res, err) => {
           if (process.env.NODE_ENV === 'test') {
             return 'silent';
