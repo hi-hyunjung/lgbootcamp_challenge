@@ -55,6 +55,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrationsRun: auto_migration,
       namingStrategy: new SnakeNamingStrategy(),
       timezone: '+00:00',
+      maxQueryExecutionTime: 400
     };
   }
 }
