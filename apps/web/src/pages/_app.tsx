@@ -83,7 +83,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     const body = JSON.stringify(metric);
     console.log(metric);
   
-    const url = '/api/vitals'; // Next.js API 라우트 사용
+    const url = '/vitals'; // Next.js API 라우트 사용
   
     if (navigator.sendBeacon) {
       const blob = new Blob([body], { type: 'application/json' });
