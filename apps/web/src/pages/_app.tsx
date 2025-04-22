@@ -35,7 +35,6 @@ import { Toaster, TooltipProvider } from '@ufb/react';
 import type { NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
-import { useReportWebVitals } from 'next/web-vitals'
 
 // NOTE: DON'T Change the following import order
 import '@/shared/styles/global.css';
@@ -79,19 +78,6 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       broadcastChannel.close();
     };
   }, []);
-
-  useReportWebVitals((metric) => {
-    const body = JSON.stringify(metric)
-    console.log(metric);
-    const url = 'https://localhost:2113/vitals'
-   
-    // Use navigator.sendBeacon() if available, falling back to fetch().
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(url, body)
-    } else {
-      fetch(url, { body, method: 'POST', keepalive: true })
-    }
-  })
 
   return (
     <>
