@@ -80,19 +80,18 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   }, []);
 
   useReportWebVitals((metric) => {
-    const body = JSON.stringify(metric)
-    
-    //console.log(metric);
-
-    const url = 'https://localhost:2113/vitals'
-   
-    // Use navigator.sendBeacon() if available, falling back to fetch().
+    const body = JSON.stringify(metric);
+    console.log(metric);
+  
+    const url = '/api/vitals'; // Next.js API 라우트 사용
+  
     if (navigator.sendBeacon) {
-      navigator.sendBeacon(url, body)
+      const blob = new Blob([body], { type: 'application/json' });
+      navigator.sendBeacon(url, blob);
     } else {
-      fetch(url, { body, method: 'POST', keepalive: true })
+      fetch(url, { body, method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' } });
     }
-  })
+  });
 
   return (
     <>
