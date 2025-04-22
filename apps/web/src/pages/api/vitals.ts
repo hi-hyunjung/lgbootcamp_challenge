@@ -1,17 +1,32 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiRequest, NextApiResponse } from 'next';
+
+// Web Vitals metric 타입 정의
+type WebVitalMetric = {
+  name: string;
+  value: number;
+  rating?: string;
+  delta?: number;
+  timestamp: string;
+};
 
 // 서버 메모리에 메트릭을 저장할 배열
-const vitals: any[] = []
+const vitals: WebVitalMetric[] = [];
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const metric = {
-      ...req.body,
+    const { name, value, rating, delta } = req.body;
+
+    const metric: WebVitalMetric = {
+      name,
+      value,
+      rating,
+      delta,
       timestamp: new Date().toISOString(),
-    }
-    vitals.push(metric)
-    console.log("metric : ", metric)
-    return res.status(200).json({ status: 'ok' })
+    };
+
+    vitals.push(metric);
+    console.log('metric : ', metric);
+    return res.status(200).json({ status: 'ok' });
   }
 
   if (req.method === 'GET') {
@@ -47,8 +62,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                   <td>${v.timestamp}</td>
                   <td>${v.name}</td>
                   <td>${v.value}</td>
-                  <td>${v.rating}</td>
-                  <td>${v.delta}</td>
+                  <td>${v.rating ?? '-'}</td>
+                  <td>${v.delta ?? '-'}</td>
                 </tr>`
                 )
                 .join('')}
@@ -56,12 +71,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           </table>
         </body>
       </html>
-    `
-    res.setHeader('Content-Type', 'text/html')
-    res.status(200).end(html)
-    return
+    `;
+    res.setHeader('Content-Type', 'text/html');
+    res.status(200).end(html);
+    return;
   }
 
-  res.setHeader('Allow', ['GET', 'POST'])
-  res.status(405).end(`Method ${req.method} Not Allowed`)
+  res.setHeader('Allow', ['GET', 'POST']);
+  res.status(405).end(`Method ${req.method} Not Allowed`);
 }
