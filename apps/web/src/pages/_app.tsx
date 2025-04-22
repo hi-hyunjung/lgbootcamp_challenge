@@ -81,7 +81,9 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   useReportWebVitals((metric) => {
     const body = JSON.stringify(metric)
-    console.log(metric);
+    
+    //console.log(metric);
+
     const url = 'https://localhost:2113/vitals'
    
     // Use navigator.sendBeacon() if available, falling back to fetch().
