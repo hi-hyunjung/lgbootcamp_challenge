@@ -80,16 +80,27 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   }, []);
 
   useReportWebVitals((metric) => {
-    const body = JSON.stringify(metric);
-    console.log(metric);
+    const path = window.location.pathname; // or router.asPath
+    console.log("path : ", path);
+    const body = JSON.stringify({
+      ...metric,
+      path : path, // 방문 경로 추가
+    });
   
-    const url = '/vitals'; // Next.js API 라우트 사용
+    console.log("body : ", body);
+  
+    const url = '/vitals';
   
     if (navigator.sendBeacon) {
       const blob = new Blob([body], { type: 'application/json' });
       navigator.sendBeacon(url, blob);
     } else {
-      fetch(url, { body, method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' } });
+      fetch(url, {
+        body,
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
   });
 

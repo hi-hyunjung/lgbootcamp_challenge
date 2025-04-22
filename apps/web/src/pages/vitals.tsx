@@ -6,6 +6,7 @@ type Metric = {
   rating?: string;
   delta?: number;
   timestamp: string;
+  path: string;
 };
 
 const vitals: Metric[] = [];
@@ -19,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
 
     const body = Buffer.concat(buffers).toString();
-    const { name, value, rating, delta } = JSON.parse(body);
+    const { name, value, rating, delta, path } = JSON.parse(body);
 
     const metric = {
       name,
@@ -27,6 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       rating,
       delta,
       timestamp: new Date().toISOString(),
+      path,
     };
 
     vitals.push(metric);
@@ -57,6 +59,7 @@ export default function VitalsPage({ vitals }: { vitals: Metric[] }) {
             <th>Value</th>
             <th>Rating</th>
             <th>Delta</th>
+            <th>Path</th>
           </tr>
         </thead>
         <tbody>
@@ -67,6 +70,7 @@ export default function VitalsPage({ vitals }: { vitals: Metric[] }) {
               <td>{v.value}</td>
               <td>{v.rating ?? '-'}</td>
               <td>{v.delta ?? '-'}</td>
+              <td>{v.path ?? '-'}</td>
             </tr>
           ))}
         </tbody>
