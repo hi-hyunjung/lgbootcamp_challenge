@@ -14,7 +14,7 @@ catalogs:
       version: 3.5.3
     typescript:
       specifier: ^5.7.3
-      version: 5.8.3
+      version: 5.8.2
 
 importers:
 
@@ -243,6 +243,9 @@ importers:
       '@types/node':
         specifier: 22.14.0
         version: 22.14.0
+      '@types/node-schedule':
+        specifier: ^2.1.7
+        version: 2.1.7
       '@types/nodemailer':
         specifier: ^6.4.15
         version: 6.4.17
@@ -4515,6 +4518,9 @@ packages:
 
   '@types/mjml@4.7.4':
     resolution: {integrity: sha512-vyi1vzWgMzFMwZY7GSZYX0GU0dmtC8vLHwpgk+NWmwbwRSrlieVyJ9sn5elodwUfklJM7yGl0zQeet1brKTWaQ==}
+
+  '@types/node-schedule@2.1.7':
+    resolution: {integrity: sha512-G7Z3R9H7r3TowoH6D2pkzUHPhcJrDF4Jz1JOQ80AX0K2DWTHoN9VC94XzFAPNMdbW9TBzMZ3LjpFi7RYdbxtXA==}
 
   '@types/node@14.18.63':
     resolution: {integrity: sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==}
@@ -14677,6 +14683,10 @@ snapshots:
     dependencies:
       '@types/mjml-core': 4.7.4
     optional: true
+
+  '@types/node-schedule@2.1.7':
+    dependencies:
+      '@types/node': 22.14.0
 
   '@types/node@14.18.63': {}
 

@@ -14,8 +14,8 @@
  * under the License.
  */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import axios from 'axios';
-import * as schedule from 'node-schedule';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import schedule from 'node-schedule';
 
 @Injectable()
 export class TrafficSimulatorService implements OnModuleInit {
@@ -49,6 +49,7 @@ export class TrafficSimulatorService implements OnModuleInit {
 
   setupTrafficSchedule() {
     // 매 분마다 실행
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     schedule.scheduleJob('* * * * *', () => {
       const now = new Date();
       const hour = now.getHours();
@@ -65,7 +66,7 @@ export class TrafficSimulatorService implements OnModuleInit {
         requestCount = 10 + Math.floor(Math.random() * 10); // 기본
       }
 
-      this.sendRequests(requestCount);
+      void this.sendRequests(requestCount);
     });
   }
 
@@ -117,19 +118,21 @@ export class TrafficSimulatorService implements OnModuleInit {
       // await new Promise((r) => setTimeout(r, 30));
 
       try {
-        let res;
+        let res: AxiosResponse;
 
         if (endpoint.method === 'GET') {
           res = await axios.get(url, { headers: header });
         } else if (endpoint.method === 'POST') {
           res = await axios.post(url, {}, { headers: header });
+        } else {
+          throw new Error('Unsupported HTTP method');
         }
 
         this.logger.log(`✅ ${requestLogPrefix} - ${res.status}`);
       } catch (err) {
-        const status = err.response?.status ?? 500;
+        const error = err as AxiosError;
         this.logger.error(
-          `❌ ${requestLogPrefix} failed - ${status}: ${err.message}`,
+          `❌ ${requestLogPrefix} failed - ${error.status}: ${error.message}`,
         );
       }
 
