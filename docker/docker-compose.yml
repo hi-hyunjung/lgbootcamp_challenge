@@ -40,13 +40,14 @@ services:
       - ACCESS_TOKEN_EXPIRED_TIME=10m
       - REFESH_TOKEN_EXPIRED_TIME=1h
       - APP_PORT=5005
-#      - APP_ADDRESS=api
+      #      - APP_ADDRESS=api
       - AUTO_MIGRATION=true
       - NODE_OPTIONS="--max_old_space_size=3072"
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
       - SMTP_SENDER=${SMTP_SENDER}
       - SMTP_BASE_URL=${SMTP_BASE_URL}
+      - MASTER_API_KEY=${MASTER_API_KEY}
     container_name: lgapi
     networks:
       - app_net
