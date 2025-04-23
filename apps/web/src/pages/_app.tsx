@@ -29,7 +29,7 @@ import { OverlayProvider } from '@toss/use-overlay';
 import { appWithTranslation } from 'next-i18next';
 import i18nConfig from 'next-i18next.config';
 import { ThemeProvider } from 'next-themes';
-
+import { useReportWebVitals } from 'next/web-vitals'
 import { Toaster, TooltipProvider } from '@ufb/react';
 
 import type { NextPageWithLayout } from '@/shared/types';
@@ -78,6 +78,31 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       broadcastChannel.close();
     };
   }, []);
+
+  useReportWebVitals((metric) => {
+    const path = window.location.pathname; // or router.asPath
+    console.log("path : ", path);
+    const body = JSON.stringify({
+      ...metric,
+      path : path, // 방문 경로 추가
+    });
+  
+    console.log("body : ", body);
+  
+    const url = '/vitals';
+  
+    if (navigator.sendBeacon) {
+      const blob = new Blob([body], { type: 'application/json' });
+      navigator.sendBeacon(url, blob);
+    } else {
+      fetch(url, {
+        body,
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+  });
 
   return (
     <>

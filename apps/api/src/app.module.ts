@@ -110,7 +110,7 @@ export const domainModules = [
       pinoHttp: {
         // transport: { target: 'pino-pretty', options: { singleLine: true } },
         autoLogging: {
-          ignore: (req: Request) => req.originalUrl === '/api/health',
+          ignore: (req: Request) => req.originalUrl === '/api/health' || req.originalUrl === '/api/metrics',
         },
         stream: pino.destination({
           dest: '/app/logs/lgbootcamp-api.log',

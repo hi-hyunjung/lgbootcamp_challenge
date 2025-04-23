@@ -20,6 +20,7 @@ import type {
   TypeOrmModuleOptions,
   TypeOrmOptionsFactory,
 } from '@nestjs/typeorm';
+import { FileLogger } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import type { ConfigServiceType } from '@/types/config-service.type';
@@ -29,6 +30,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(
     private readonly configService: ConfigService<ConfigServiceType>,
   ) {}
+
   createTypeOrmOptions(): TypeOrmModuleOptions {
     const {
       main_url,
@@ -51,11 +53,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       entities: [join(__dirname, '../../../**/*.entity.{ts,js}')],
       migrations: [join(__dirname, 'migrations/*.{ts,js}')],
       migrationsTableName: 'migrations',
-      logging: ['warn', 'error'],
+      // logging: ['warn', 'error'], //
+      logging: true,
+      logger: new FileLogger(true, { logPath: `logs/typeorm.log` }),
       migrationsRun: auto_migration,
       namingStrategy: new SnakeNamingStrategy(),
       timezone: '+00:00',
-      maxQueryExecutionTime: 400
+      // maxQueryExecutionTime: 400
     };
   }
 }
