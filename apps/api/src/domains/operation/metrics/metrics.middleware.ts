@@ -15,20 +15,32 @@
  */
 
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { NextFunction, Request, Response } from 'express';
-
-import { httpRequestsTotal } from './metrics.counter';
+import { Counter, Histogram } from 'prom-client';
 
 @Injectable()
 export class MetricsMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
+  constructor(
+    @InjectMetric('http_requests_total')
+    private readonly httpRequestsTotal: Counter<string>,
+
+    @InjectMetric('http_request_duration_seconds')
+    private readonly httpRequestDuration: Histogram<string>,
+  ) {}
+
+  use(req: Request, res: Response, next: NextFunction): void {
+    const method = req.method;
+    const path = req.originalUrl;
+
+    const end = this.httpRequestDuration.startTimer({ method, path });
+
     res.on('finish', () => {
-      const method = req.method;
-      // const path = req.route?.path || req.path;
-      const path = req.originalUrl;
       const status = res.statusCode.toString();
 
-      httpRequestsTotal.labels(method, path, status).inc();
+      this.httpRequestsTotal.labels(method, path, status).inc();
+
+      end({ status: status });
     });
 
     next();
