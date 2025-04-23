@@ -21,7 +21,7 @@ import schedule from 'node-schedule';
 export class TrafficSimulatorService implements OnModuleInit {
   private readonly logger = new Logger(TrafficSimulatorService.name);
 
-  private readonly baseUrl = 'http:localhost:4000/api';
+  private readonly baseUrl = 'https://koordinate.xyz/api';
 
   private readonly endpoints = [
     { method: 'GET', path: '/metrics', weight: 10 },
