@@ -5,7 +5,9 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src", "test", "integration-test"],
   "exclude": ["node_modules", "dist"]

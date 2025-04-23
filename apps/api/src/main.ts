@@ -29,6 +29,7 @@ import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
 import { MetricsModule } from './domains/operation/metrics/metrics.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
+import { TrafficSimulatorModule } from './domains/operation/traffic-simulator/traffic-simulator.module';
 import type { ConfigServiceType } from './types/config-service.type';
 
 const globalPrefix = 'api';
@@ -69,6 +70,7 @@ async function bootstrap() {
     HealthModule,
     MigrationModule,
     MetricsModule,
+    TrafficSimulatorModule,
   ];
   const adminDocument = SwaggerModule.createDocument(app, adminDocumentConfig, {
     include: domainModules.filter((module) => !excludeModules.includes(module)),
