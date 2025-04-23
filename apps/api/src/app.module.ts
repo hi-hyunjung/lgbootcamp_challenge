@@ -60,6 +60,7 @@ import { HealthModule } from './domains/operation/health/health.module';
 import { MetricsModule } from './domains/operation/metrics/metrics.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
 import { SchedulerLockModule } from './domains/operation/scheduler-lock/scheduler-lock.module';
+import { TrafficSimulatorModule } from './domains/operation/traffic-simulator/traffic-simulator.module';
 
 export const domainModules = [
   AuthModule,
@@ -70,7 +71,7 @@ export const domainModules = [
   CategoryModule,
   HealthModule,
   MigrationModule,
-  // MetricsModule,
+  MetricsModule,
   ApiKeyModule,
   IssueTrackerModule,
   IssueModule,
@@ -86,6 +87,7 @@ export const domainModules = [
   FeedbackIssueStatisticsModule,
   APIModule,
   SchedulerLockModule,
+  TrafficSimulatorModule,
 ] as (typeof AuthModule)[];
 
 @Module({
@@ -94,7 +96,6 @@ export const domainModules = [
     OpensearchConfigModule,
     MailerConfigModule,
     // PrometheusModule.register(),
-    MetricsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, opensearchConfig, smtpConfig, jwtConfig, mysqlConfig],
@@ -116,7 +117,6 @@ export const domainModules = [
           // minLength: 4096,
           // sync: false,
           sync: true,
-
         }),
         customLogLevel: (req, res, err) => {
           if (process.env.NODE_ENV === 'test') {
