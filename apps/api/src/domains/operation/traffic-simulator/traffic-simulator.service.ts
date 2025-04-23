@@ -73,7 +73,7 @@ export class TrafficSimulatorService implements OnModuleInit {
     this.logger.log(`Sending ${count} requests (varied endpoints)`);
 
     const header = {
-      'x-api-key': 'BE64C9F250EEC8814F6F',
+      'x-api-key': `${process.env.MASTER_API_KEY}`,
     };
 
     for (let i = 0; i < count; i++) {
