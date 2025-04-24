@@ -131,51 +131,21 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
     }
   }
 
-  // private extractRequestContextFromQueryRunner(queryRunner: QueryRunner) {
-  //   const dbConn = (queryRunner as any).databaseConnection;
-  //
-  //   const symbols = Object.getOwnPropertySymbols(dbConn);
-  //   const storeSymbol = symbols.find(
-  //     (s) => s.toString() === 'Symbol(kResourceStore)',
-  //   );
-  //   if (!storeSymbol) return {};
-  //
-  //   return dbConn[storeSymbol]; // { requestId, userId, ... }
-  // }
-
   private extractContextFromRunner(queryRunner: QueryRunner) {
-    // const runner = queryRunner as any;
-    // const conn = runner?.databaseConnection as PoolConnection;
 
     const runner = queryRunner as unknown as {
       databaseConnectionPromise?: Promise<PoolConnection>;
     };
 
-    console.log('typeorm request1');
     const conn = runner.databaseConnectionPromise;
 
     if (!conn) return;
 
-    console.log('typeorm request2');
     const symbols = Object.getOwnPropertySymbols(conn);
-    console.log('typeorm request3');
     const kStore = symbols.find(
       (s) => s.toString() === 'Symbol(kResourceStore)',
     );
-    console.log('typeorm request4');
-
-    // //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    // const store = kStore ? conn[kStore] : {};
-    // // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    // return store;
 
    return kStore ? (conn[kStore] as Record<string, unknown>) : {};
   }
-
-  // private extractQueryContext(queryRunner: QueryRunner) {
-  //   const metadata = queryRunner.databaseConnectionPromise;
-  //   const resourceStore = Object.getOwnPropertySymbols(
-  //     metadata.find((symbol) => symbol.toString() === 'Symbol(kResourceStore)'),
-  //   );
-  // }
 }
