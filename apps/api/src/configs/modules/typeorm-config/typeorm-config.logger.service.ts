@@ -23,13 +23,13 @@ import { QueryRunner, Logger as TypeOrmLogger } from 'typeorm';
 export class TypeOrmCustomLogger implements TypeOrmLogger {
   private logger = new Logger('TypeORM');
 
-  async logQuery(
+  logQuery(
     query: string,
     parameters?: any[],
     _queryRunner?: QueryRunner,
   ): void {
     const context: Record<string, unknown> | undefined =
-      _queryRunner ? await this.extractContextFromRunner(_queryRunner) : {};
+      _queryRunner ? this.extractContextFromRunner(_queryRunner) : {};
 
     this.logger.debug(
       {
@@ -61,9 +61,9 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
     );
   }
 
-  async logQuerySlow(time: number, query: string, parameters?: any[], _queryRunner?: QueryRunner): void {
+  logQuerySlow(time: number, query: string, parameters?: any[], _queryRunner?: QueryRunner): void {
     const context: Record<string, unknown> | undefined =
-        _queryRunner ? await this.extractContextFromRunner(_queryRunner) : {};
+        _queryRunner ? this.extractContextFromRunner(_queryRunner) : {};
     this.logger.warn(
       {
         type: 'slow_query',
@@ -101,13 +101,13 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
     );
   }
 
-  async log(
+  log(
     level: 'log' | 'warn' | 'info',
     message: string | number | Record<string, unknown>,
     _queryRunner?: QueryRunner,
   ) {
     const context: Record<string, unknown> | undefined =
-        _queryRunner ? await this.extractContextFromRunner(_queryRunner) : {};
+        _queryRunner ? this.extractContextFromRunner(_queryRunner) : {};
     if (level === 'info' || level === 'log') {
       this.logger.log(
         {
@@ -143,21 +143,26 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
   //   return dbConn[storeSymbol]; // { requestId, userId, ... }
   // }
 
-  private async extractContextFromRunner(queryRunner: QueryRunner) {
+  private extractContextFromRunner(queryRunner: QueryRunner) {
     // const runner = queryRunner as any;
     // const conn = runner?.databaseConnection as PoolConnection;
 
     const runner = queryRunner as unknown as {
       databaseConnectionPromise?: Promise<PoolConnection>;
     };
-    const conn = await runner.databaseConnectionPromise;
+
+    console.log('typeorm request1');
+    const conn = runner.databaseConnectionPromise;
 
     if (!conn) return;
 
+    console.log('typeorm request2');
     const symbols = Object.getOwnPropertySymbols(conn);
+    console.log('typeorm request3');
     const kStore = symbols.find(
       (s) => s.toString() === 'Symbol(kResourceStore)',
     );
+    console.log('typeorm request4');
 
     // //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     // const store = kStore ? conn[kStore] : {};
