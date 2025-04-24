@@ -13,16 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import type { PoolConnection } from 'mysql2';
 import { QueryRunner, Logger as TypeOrmLogger } from 'typeorm';
+import {Logger} from 'nestjs-pino'
 
 // import {Logger} from ''
 
 @Injectable()
 export class TypeOrmCustomLogger implements TypeOrmLogger {
-  function;
-  private logger = new Logger();
+  //private logger = new Logger();
+
+  constructor(private readonly logger: Logger) {}
 
   logQuery(
     query: string,
