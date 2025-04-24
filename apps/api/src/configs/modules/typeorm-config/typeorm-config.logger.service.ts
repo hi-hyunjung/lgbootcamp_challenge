@@ -67,11 +67,13 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
     this.logger.warn(
       {
         type: 'slow_query',
-        duration: time,
-        query,
-        parameters,
         timestamp: new Date().toISOString(),
-        context: context,
+        typeorm: {
+          duration: time,
+          query,
+          parameters,
+          context: context,
+        },
       },
       'TypeORM Slow Query',
     );
