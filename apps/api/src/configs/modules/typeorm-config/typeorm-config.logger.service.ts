@@ -23,13 +23,13 @@ import { QueryRunner, Logger as TypeOrmLogger } from 'typeorm';
 export class TypeOrmCustomLogger implements TypeOrmLogger {
   private logger = new Logger('TypeORM');
 
-  logQuery(
+  async logQuery(
     query: string,
     parameters?: any[],
     _queryRunner?: QueryRunner,
   ): void {
     const context: Record<string, unknown> | undefined =
-      _queryRunner ? this.extractContextFromRunner(_queryRunner) : {};
+      _queryRunner ? await this.extractContextFromRunner(_queryRunner) : {};
 
     this.logger.debug(
       {
@@ -61,9 +61,9 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
     );
   }
 
-  logQuerySlow(time: number, query: string, parameters?: any[], _queryRunner?: QueryRunner): void {
+  async logQuerySlow(time: number, query: string, parameters?: any[], _queryRunner?: QueryRunner): void {
     const context: Record<string, unknown> | undefined =
-        _queryRunner ? this.extractContextFromRunner(_queryRunner) : {};
+        _queryRunner ? await this.extractContextFromRunner(_queryRunner) : {};
     this.logger.warn(
       {
         type: 'slow_query',
@@ -101,13 +101,13 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
     );
   }
 
-  log(
+  async log(
     level: 'log' | 'warn' | 'info',
     message: string | number | Record<string, unknown>,
     _queryRunner?: QueryRunner,
   ) {
     const context: Record<string, unknown> | undefined =
-        _queryRunner ? this.extractContextFromRunner(_queryRunner) : {};
+        _queryRunner ? await this.extractContextFromRunner(_queryRunner) : {};
     if (level === 'info' || level === 'log') {
       this.logger.log(
         {
@@ -143,14 +143,14 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
   //   return dbConn[storeSymbol]; // { requestId, userId, ... }
   // }
 
-  private extractContextFromRunner(queryRunner: QueryRunner) {
+  private async extractContextFromRunner(queryRunner: QueryRunner) {
     // const runner = queryRunner as any;
     // const conn = runner?.databaseConnection as PoolConnection;
 
     const runner = queryRunner as unknown as {
       databaseConnectionPromise?: Promise<PoolConnection>;
     };
-    const conn = runner.databaseConnectionPromise;
+    const conn = await runner.databaseConnectionPromise;
 
     if (!conn) return;
 
