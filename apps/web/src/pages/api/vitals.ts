@@ -27,7 +27,7 @@ export default function handler(
 ) {
 
   const logger = getLogger('web-vitals');
-  logger.info(req);
+  logger.info(req.body);
 
   if (req.method !== 'POST') {
     return res.status(405).json({
