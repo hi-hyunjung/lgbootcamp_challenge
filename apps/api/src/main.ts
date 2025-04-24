@@ -14,7 +14,7 @@
  * under the License.
  */
 import multiPart from '@fastify/multipart';
-import { Logger as DefaultLogger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -99,7 +99,7 @@ async function bootstrap() {
     };
 
   await app.listen(port, address);
-  DefaultLogger.log(`🚀 Application is running on: ${await app.getUrl()}`);
+  app.get(Logger).log(`🚀 Application is running on: ${await app.getUrl()}`);
 }
 
 void bootstrap();
