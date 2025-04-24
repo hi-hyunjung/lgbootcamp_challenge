@@ -22,6 +22,7 @@ import {
 } from '@willsoto/nestjs-prometheus';
 
 import { MetricsMiddleware } from './metrics.middleware';
+import { MetricsService } from './metrics.service';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { MetricsMiddleware } from './metrics.middleware';
     }),
   ],
   providers: [
+    MetricsService,
     makeCounterProvider({
       name: 'http_requests_total',
       help: 'Total number of HTTP requests',
@@ -43,6 +45,7 @@ import { MetricsMiddleware } from './metrics.middleware';
       buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.3, 0.5, 1, 2, 5],
     }),
   ],
+  exports: [MetricsService],
 })
 export class MetricsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

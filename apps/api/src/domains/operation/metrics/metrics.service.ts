@@ -13,14 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
-import { NextFunction, Request, Response } from 'express';
 import { Counter, Histogram } from 'prom-client';
 
 @Injectable()
-export class MetricsMiddleware implements NestMiddleware {
+export class MetricsService {
   constructor(
     @InjectMetric('http_requests_total')
     private readonly httpRequestsTotal: Counter<string>,
@@ -29,24 +27,13 @@ export class MetricsMiddleware implements NestMiddleware {
     private readonly httpRequestDuration: Histogram<string>,
   ) {}
 
-  use(req: Request, res: Response, next: NextFunction): void {
-    if (req.headers['x-simulated']) {
-      return next();
-    }
-
-    const method = req.method;
-    const path = req.originalUrl;
-
-    const end = this.httpRequestDuration.startTimer({ method, path });
-
-    res.on('finish', () => {
-      const status = res.statusCode.toString();
-
-      this.httpRequestsTotal.labels(method, path, status).inc();
-
-      end({ status: status });
-    });
-
-    next();
+  recordRequest(
+    method: string,
+    path: string,
+    status: string,
+    duration: number,
+  ) {
+    this.httpRequestsTotal.labels(method, path, status).inc();
+    this.httpRequestDuration.labels(method, path, status).observe(duration);
   }
 }

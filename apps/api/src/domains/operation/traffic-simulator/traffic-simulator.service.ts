@@ -13,32 +13,70 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { performance } from 'perf_hooks';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import schedule from 'node-schedule';
+
+import { MetricsService } from '../metrics/metrics.service';
 
 @Injectable()
 export class TrafficSimulatorService implements OnModuleInit {
   private readonly logger = new Logger(TrafficSimulatorService.name);
 
-  private readonly baseUrl = 'https://koordinate.xyz/api';
+  constructor(private readonly metricsService: MetricsService) {}
+
+  // private readonly baseUrl = 'https://koordinate.xyz/api';
+  private readonly baseUrl = 'http://localhost:4000/api';
 
   private readonly endpoints = [
-    { method: 'GET', path: '/metrics', weight: 10 },
-    { method: 'GET', path: '/docs', weight: 10 },
     {
       method: 'GET',
       path: '/projects/1',
-      weight: 40,
+      weight: 30,
       failRate: 0.2,
       delayRate: 0.3,
     },
     {
       method: 'GET',
       path: '/projects/1/issues/2',
-      weight: 40,
+      weight: 30,
       failRate: 0.2,
       delayRate: 0.3,
+    },
+    {
+      method: 'GET',
+      path: '/projects/1/issues/{issueId}',
+      weight: 10,
+      failRate: 0,
+      delayRate: 0,
+    },
+    {
+      method: 'PUT',
+      path: '/projects/1/categories/2',
+      weight: 10,
+      failRate: 0,
+      delayRate: 0,
+      body: {
+        name: 'modified_category' + String(Math.floor(Math.random() * 10)),
+      },
+    },
+    {
+      method: 'POST',
+      path: '/projects/1/issues/search',
+      weight: 20,
+      failRate: 0.1,
+      delayRate: 0.1,
+      body: {
+        limit: 10,
+        page: 1,
+        query: {
+          name: 'issue name',
+        },
+        sort: {
+          createdAt: 'ASC',
+        },
+      },
     },
   ];
 
@@ -75,47 +113,40 @@ export class TrafficSimulatorService implements OnModuleInit {
 
     const header = {
       'x-api-key': `${process.env.MASTER_API_KEY}`,
+      'x-simulated': 'true',
     };
 
     for (let i = 0; i < count; i++) {
       const endpoint = this.getWeightedRandomEndpoint();
-      const url = `${this.baseUrl}${endpoint.path}`;
+      const interpolatedPath = this.interpolatePath(endpoint.path);
+      const url = `${this.baseUrl}${interpolatedPath}`;
 
       const requestLogPrefix = `[${i + 1}/${count}] ${endpoint.method} ${url}`;
 
-      const failRate = endpoint.failRate ?? 0;
-      const delayRate = endpoint.delayRate ?? 0;
       const SLOW_RESPONSE_MIN_MS = 4000;
 
+      const start = performance.now();
+
       // 💥 실패 시뮬레이션
-      if (Math.random() < failRate) {
+      if (Math.random() < endpoint.failRate) {
         this.logger.warn(`❌ Simulated failure for ${requestLogPrefix}`);
+
+        const duration = (performance.now() - start) / 1000;
+        this.metricsService.recordRequest(
+          endpoint.method,
+          interpolatedPath,
+          '500',
+          duration,
+        );
+
         continue;
       }
 
       // 💤 응답 지연 시뮬레이션
-      if (Math.random() < delayRate) {
+      if (Math.random() < endpoint.delayRate) {
         this.logger.log(`⏳ Simulating slow response for ${requestLogPrefix}`);
         await new Promise((r) => setTimeout(r, SLOW_RESPONSE_MIN_MS));
       }
-
-      // try {
-      //   if (endpoint.method === 'GET') {
-      //     await axios.get(`${url}`, { headers: header });
-      //   } else if (endpoint.method === 'POST') {
-      //     // await axios.post(url, endpoint.body);
-      //     await axios.post(url, {}, { headers: header });
-      //   } else {
-      //     this.logger.warn(`⚠️ Unsupported method: ${endpoint.method}`);
-      //     continue;
-      //   }
-
-      //   this.logger.debug(`✅ ${requestLogPrefix}`);
-      // } catch (err) {
-      //   this.logger.error(`❌ ${requestLogPrefix} failed: ${err.message}`);
-      // }
-
-      // await new Promise((r) => setTimeout(r, 30));
 
       try {
         let res: AxiosResponse;
@@ -128,9 +159,28 @@ export class TrafficSimulatorService implements OnModuleInit {
           throw new Error('Unsupported HTTP method');
         }
 
+        const duration = (performance.now() - start) / 1000;
+        this.metricsService.recordRequest(
+          endpoint.method,
+          interpolatedPath,
+          String(res.status),
+          duration,
+        );
+
         this.logger.log(`✅ ${requestLogPrefix} - ${res.status}`);
       } catch (err) {
         const error = err as AxiosError;
+
+        const statusCode = error.response?.status ?? 500;
+        const duration = (performance.now() - start) / 1000;
+
+        this.metricsService.recordRequest(
+          endpoint.method,
+          interpolatedPath,
+          String(statusCode),
+          duration,
+        );
+
         this.logger.error(
           `❌ ${requestLogPrefix} failed - ${error.status}: ${error.message}`,
         );
@@ -151,5 +201,12 @@ export class TrafficSimulatorService implements OnModuleInit {
     }
 
     return this.endpoints[this.endpoints.length - 1]; // fallback
+  }
+
+  private interpolatePath(path: string): string {
+    return path.replace(
+      '{issueId}',
+      (Math.floor(Math.random() * 100) + 1).toString(),
+    ); // 1~100
   }
 }
