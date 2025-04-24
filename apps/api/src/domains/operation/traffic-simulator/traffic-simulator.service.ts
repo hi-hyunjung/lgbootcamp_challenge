@@ -26,8 +26,8 @@ export class TrafficSimulatorService implements OnModuleInit {
 
   constructor(private readonly metricsService: MetricsService) {}
 
-  // private readonly baseUrl = 'https://koordinate.xyz/api';
-  private readonly baseUrl = 'http://localhost:4000/api';
+  private readonly baseUrl = 'https://koordinate.xyz/api';
+  // private readonly baseUrl = 'http://localhost:4000/api';
 
   private readonly endpoints = [
     {
