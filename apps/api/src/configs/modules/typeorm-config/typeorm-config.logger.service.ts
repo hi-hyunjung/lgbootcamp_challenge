@@ -148,9 +148,9 @@ export class TypeOrmCustomLogger implements TypeOrmLogger {
     // const conn = runner?.databaseConnection as PoolConnection;
 
     const runner = queryRunner as unknown as {
-      databaseConnection?: PoolConnection;
+      databaseConnectionPromise?: Promise<PoolConnection>;
     };
-    const conn = runner.databaseConnection;
+    const conn = runner.databaseConnectionPromise;
 
     if (!conn) return;
 
