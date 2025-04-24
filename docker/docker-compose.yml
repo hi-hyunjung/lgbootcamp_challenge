@@ -22,6 +22,9 @@ services:
       - app_net
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.lgweb-vitals.rule=PathPrefix(`/api/vitals`)"
+      - "traefik.http.routers.lgweb-vitals.priority=200"
+      - "traefik.http.routers.lgweb-vitals.entrypoints=web"
       - "traefik.http.routers.lgweb.rule=PathPrefix(`/`)"
       - "traefik.http.routers.lgweb.entrypoints=web"
       - "traefik.http.services.lgweb.loadbalancer.server.port=5000"
@@ -56,6 +59,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lgapi.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.lgapi.priority=100"
       - "traefik.http.routers.lgapi.entrypoints=web"
       - "traefik.http.services.lgapi.loadbalancer.server.port=5005"
 

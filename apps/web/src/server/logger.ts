@@ -16,11 +16,37 @@
 import pino from 'pino';
 
 // create pino logger
-const getLogger = (name: string) =>
-  pino({
+const getLogger = (name: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const transport = pino.transport({
+    targets: [
+      // 파일 출력
+      {
+        target: 'pino/file',
+        level: 'info',
+        options: {
+          destination: `${process.cwd()}/logs/app.log`,
+          mkdir: true,         // logs 디렉토리 자동 생성
+          sync: true,
+          append: true,
+        },
+      },
+    ],
+  });
+
+  return pino({
     name,
     base: { env: process.env.NODE_ENV },
-    enabled: process.env.NODE_ENV !== 'test',
-  });
+    enabled: true,
+    level: 'info',
+    formatters: {
+      level: (label: string) => {
+        return { level: label };
+      },
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  }, transport);
+
+}
 
 export default getLogger;

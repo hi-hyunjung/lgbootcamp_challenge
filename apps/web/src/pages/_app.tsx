@@ -81,21 +81,21 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   useReportWebVitals((metric) => {
     const path = window.location.pathname; // or router.asPath
-    console.log("path : ", path);
+    // console.log("path : ", path);
     const body = JSON.stringify({
       ...metric,
       path : path, // 방문 경로 추가
     });
+    // console.log("body : ", body);
+
+    const url = '/api/vitals';
   
-    console.log("body : ", body);
-  
-    const url = '/vitals';
-  
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (navigator.sendBeacon) {
       const blob = new Blob([body], { type: 'application/json' });
       navigator.sendBeacon(url, blob);
     } else {
-      fetch(url, {
+      void fetch(url, {
         body,
         method: 'POST',
         keepalive: true,
