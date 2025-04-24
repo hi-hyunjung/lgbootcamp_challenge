@@ -20,6 +20,8 @@ services:
       - lgapi
     networks:
       - app_net
+    volumes:
+      - /Users/hjbj/logs/lgbootcamp/web:/app/apps/web/logs
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lgweb-vitals.rule=PathPrefix(`/api/vitals`)"
