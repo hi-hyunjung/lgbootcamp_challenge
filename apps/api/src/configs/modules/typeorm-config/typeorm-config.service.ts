@@ -14,16 +14,17 @@
  * under the License.
  */
 import { join } from 'path';
-import { Injectable } from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type {
   TypeOrmModuleOptions,
   TypeOrmOptionsFactory,
 } from '@nestjs/typeorm';
-import { FileLogger } from 'typeorm';
+// import { FileLogger } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import type { ConfigServiceType } from '@/types/config-service.type';
+import { TypeOrmCustomLogger } from './typeorm-config.logger.service';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -55,11 +56,12 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrationsTableName: 'migrations',
       // logging: ['warn', 'error'], //
       logging: true,
-      logger: new FileLogger(true, { logPath: `logs/typeorm.log` }),
+      // logger: new FileLogger(true, { logPath: `logs/typeorm.log` }),
+      logger: new TypeOrmCustomLogger(),
       migrationsRun: auto_migration,
       namingStrategy: new SnakeNamingStrategy(),
       timezone: '+00:00',
-      maxQueryExecutionTime: 10
+      maxQueryExecutionTime: 15,
     };
   }
 }
