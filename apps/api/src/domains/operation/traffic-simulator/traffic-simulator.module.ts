@@ -16,9 +16,11 @@
 
 import { Module } from '@nestjs/common';
 
+import { MetricsModule } from '../metrics/metrics.module';
 import { TrafficSimulatorService } from './traffic-simulator.service';
 
 @Module({
+  imports: [MetricsModule],
   providers: [TrafficSimulatorService],
   exports: [TrafficSimulatorService],
 })
